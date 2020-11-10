@@ -18,10 +18,18 @@ fn main() {
     //TODO: Panic if not enough arguments are provided
     //Panic should output the string "Not enough arguments"
 
+    if args.len() < 2 {
+        panic!("Not enough arguments");
+    }
+
     //TODO: 
     //  * Pass an argument to read_file to read the original text
     //  * Pass that to disemvowel to remove the vowels
     //  * Write the disemvoweled text using write_file
+
+    let temp = read_file(&args[1]);
+    disemvowel(temp);
+    write_file(&args[2], temp);
 
     // Replace String::from("test") with what you get from read_file
     let s = String::from("dummy text");
