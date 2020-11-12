@@ -17,6 +17,9 @@ fn main() {
 
     //TODO: Panic if not enough arguments are provided
     //Panic should output the string "Not enough arguments"
+    if args.len() != 2 {
+        panic!("Not enough arguments")
+    }
 
     if args.len() < 2 {
         panic!("Not enough arguments");
@@ -27,12 +30,14 @@ fn main() {
     //  * Pass that to disemvowel to remove the vowels
     //  * Write the disemvoweled text using write_file
 
-    let temp = read_file(&args[1]);
-    disemvowel(temp);
-    write_file(&args[2], temp);
+    let temp = read_file(Path::new(&args[1]));
+    disemvowel(&*temp);
+    write_file(Path::new(&args[2]), &*temp);
+
+
 
     // Replace String::from("test") with what you get from read_file
-    let s = String::from("dummy text");
+    let s = String::from("temp");
 
     let s_disemvowel = disemvowel(&s);
 
@@ -50,8 +55,13 @@ fn write_file(path: &Path, s: &str) {
 
 //TODO: Return the input string without vowels.
 fn disemvowel(s: &str) -> String {
-    String::from(s)
+    let mut temp = String::from(s);
+    temp.retain(|x| (x != 'a') && (x != 'e') && (x != 'i') && (x != 'o') && (x != 'u') && (x != 'A') && (x != 'E') && (x != 'I') && (x != 'O') && (x != 'U'));
+
+    return String::from(&*temp);
+
 }
+
 
 // Everything from here down is Rust test code. You shouldn't need to
 // change any of this.
@@ -121,7 +131,7 @@ mod tests {
         use super::*;
         #[test]
         fn requires_two_arguments() {
-            let mut cmd = Command::cargo_bin("rust-disemvowel").unwrap();
+            let mut cmd = Command::cargo_bin("disemvowel-in-rust").unwrap();
             cmd.arg("1");
             cmd.assert()
                 .failure()
@@ -129,7 +139,7 @@ mod tests {
         }
         #[test]
         fn requires_read_file() {
-            let mut cmd = Command::cargo_bin("rust-disemvowel").unwrap();
+            let mut cmd = Command::cargo_bin("disemvowel-in-rust").unwrap();
             cmd.arg("/this/path/does/not/exist")
                 .arg("output/path/doesnt/matter");
             cmd.assert()
